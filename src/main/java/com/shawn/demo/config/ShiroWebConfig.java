@@ -20,6 +20,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
@@ -128,6 +129,7 @@ public class ShiroWebConfig {
     /**
      * 会话管理器
      */
+    @Bean
     public DefaultSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setGlobalSessionTimeout(1800);
@@ -138,6 +140,62 @@ public class ShiroWebConfig {
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(sessionIdCookie());
         return sessionManager;
+    }
+
+    /**
+     * 安全管理器
+     */
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(userRealm());
+        securityManager.setSessionManager(sessionManager());
+//        securityManager.setCacheManager();
+        securityManager.setRememberMeManager(rememberMeManager());
+        return securityManager;
+    }
+
+    /**
+     * 相当于调用SecurityUtils.setSecurityManager(securityManager)
+     */
+
+
+    /**
+     * 基于Form表单的身份验证过滤器
+     */
+    @Bean
+    public Filter formAuthenticationFilter() {
+        FormAuthenticationFilter formauthenticationFilter = new FormAuthenticationFilter();
+        formauthenticationFilter.setUsernameParam("username");
+        formauthenticationFilter.setPasswordParam("password");
+        formauthenticationFilter.setRememberMeParam("rememberMe");
+        formauthenticationFilter.setLoginUrl("/login");
+        return formauthenticationFilter;
+    }
+
+    @Bean
+    public ShiroFilterFactoryBean shiroFilter() {
+        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
+        shiroFilter.setSecurityManager(securityManager());
+        shiroFilter.setLoginUrl("/login");
+
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("authc", formAuthenticationFilter());
+//        filters.put("user", userRealm());
+        shiroFilter.setFilters(filters);
+
+        Map<String, String> definitions = new HashMap<>();
+        definitions.put("/login", "authc");
+        definitions.put("*//**", "user");
+        shiroFilter.setFilterChainDefinitionMap(definitions);
+
+        return shiroFilter;
+    }
+
+    @Bean
+    public LifecycleBeanPostProcessor shiroLifecycle() {
+        LifecycleBeanPostProcessor shiroLifecycle = new LifecycleBeanPostProcessor();
+        return shiroLifecycle;
     }
 
     /*
@@ -209,28 +267,5 @@ public class ShiroWebConfig {
         return formauthenticationFilter;
     }
 
-    @Bean
-    public ShiroFilterFactoryBean shiroFilter() {
-        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
-        shiroFilter.setSecurityManager(securityManager());
-        shiroFilter.setLoginUrl("/login");
-
-        Map<String, Filter> filters = new HashMap<>();
-        filters.put("authc", formAuthenticationFilter());
-        filters.put("user", userRealm());
-        shiroFilter.setFilters(filters);
-
-        Map<String, String> definitions = new HashMap<>();
-        definitions.put("/login", "authc");
-        definitions.put("*//**", "user");
-        shiroFilter.setFilterChainDefinitionMap(definitions);
-
-        return shiroFilter;
-    }
-
-    @Bean
-    public LifecycleBeanPostProcessor shiroLifecycle() {
-        LifecycleBeanPostProcessor shiroLifecycle = new LifecycleBeanPostProcessor();
-        return shiroLifecycle;
-    }*/
+    */
 }
