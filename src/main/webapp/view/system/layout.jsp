@@ -29,7 +29,7 @@
         </div>
         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="list-group">
-                <a href="#" class="list-group-item text-center"><i class="glyphicon glyphicon-user"></i>用户管理</a>
+                <a href="javascript: openTab()" class="list-group-item text-center"><i class="glyphicon glyphicon-user"></i>用户管理</a>
                 <a href="#" class="list-group-item text-center">角色管理</a>
                 <a href="#" class="list-group-item text-center">菜单管理</a>
                 <a href="#" class="list-group-item text-center">权限管理</a>
@@ -88,13 +88,36 @@
 
 </div>
 <script>
-    var tabTitle = '<li role="presentation" class="active"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>';
-    $('#main-content .nav-tabs').append(tabTitle);
+    var menu = {
+        "title": "用户管理",
+        "id": "10001",
+        "url": "user.jsp"
+    };
+
+    function openTab() {
+
+
+    var openedTabs = $('#main-content .nav-tabs li a');
+    var flag = false;
+    for (var i = 0; i < openedTabs.length; i++) {
+        if ($(openedTabs[i]).attr('href') == '#' + menu.id) {
+            $(openedTabs[i]).parent().attr('class', 'active');
+            flag = true;
+        } else {
+            $(openedTabs[i]).parent().removeAttr('class');
+        }
+    }
+    if (!flag) {
+        var tabTitle = '<li role="presentation" class="active"><a href="#'+ menu.id +'" aria-controls="'+ menu.id +'" role="tab" data-toggle="tab">'+ menu.title +'</a></li>';
+        $('#main-content .nav-tabs').append(tabTitle);
 //    var tabContent = '<div role="tabpanel" class="tab-pane" id="settings"></div>';
-    $('#main-content .tab-content').load('user.jsp')
+        $('#main-content .tab-content').load(menu.url)
 //    $('#main-content .tab-content').append(tabTitle, function(){
 //        $('#settings').load('user.jsp')
 //    });
+    }
+    }
+
 
 </script>
 </body>
