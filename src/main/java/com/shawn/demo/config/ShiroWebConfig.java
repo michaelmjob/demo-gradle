@@ -1,5 +1,7 @@
 package com.shawn.demo.config;
 
+import com.shawn.demo.filter.ForceLogoutFilter;
+import com.shawn.demo.filter.SysUserFilter;
 import com.shawn.demo.realm.UserRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -49,6 +51,7 @@ public class ShiroWebConfig {
      */
     @Bean
     public CredentialsMatcher credentialsMatcher() {
+        System.out.println("******** credentialsMatcher()");
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
         credentialsMatcher.setHashAlgorithmName("md5");
         credentialsMatcher.setHashIterations(2);
@@ -62,6 +65,7 @@ public class ShiroWebConfig {
      */
     @Bean
     public Realm userRealm() {
+        System.out.println("******** userRealm()");
         UserRealm userRealm = new UserRealm();
         userRealm.setCredentialsMatcher(credentialsMatcher());
         userRealm.setCachingEnabled(false);
@@ -73,6 +77,7 @@ public class ShiroWebConfig {
      */
     @Bean
     public SessionIdGenerator sessionIdGenerator() {
+        System.out.println("******** sessionIdGenerator()");
         return new JavaUuidSessionIdGenerator();
     }
 
@@ -81,7 +86,9 @@ public class ShiroWebConfig {
      */
     @Bean
     public Cookie sessionIdCookie() {
-        SimpleCookie sessionIdCookie = new SimpleCookie();
+        System.out.println("******** sessionIdCookie()");
+        SimpleCookie sessionIdCookie = new SimpleCookie("sid");
+        sessionIdCookie.setName("sid");
         sessionIdCookie.setHttpOnly(true);
         sessionIdCookie.setMaxAge(-1);
         return sessionIdCookie;
@@ -89,6 +96,7 @@ public class ShiroWebConfig {
 
     @Bean
     public Cookie rememberMeCookie() {
+        System.out.println("******** rememberMeCookie()");
         SimpleCookie rememberMeCookie = new SimpleCookie("rememberMe");
         rememberMeCookie.setHttpOnly(true);
         rememberMeCookie.setMaxAge(30);
@@ -99,6 +107,7 @@ public class ShiroWebConfig {
      * rememberMe管理器
      */
     public RememberMeManager rememberMeManager() {
+        System.out.println("******** rememberMeManager()");
         CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
         rememberMeManager.setCookie(rememberMeCookie());
         return rememberMeManager;
@@ -109,6 +118,7 @@ public class ShiroWebConfig {
      */
     @Bean
     public SessionDAO sessionDAO() {
+        System.out.println("******** sessionDAO()");
         EnterpriseCacheSessionDAO sessionDAO = new EnterpriseCacheSessionDAO();
         sessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
         sessionDAO.setSessionIdGenerator(sessionIdGenerator());
@@ -120,6 +130,7 @@ public class ShiroWebConfig {
      */
     @Bean
     public SessionValidationScheduler sessionValidationScheduler() {
+        System.out.println("******** sessionValidationScheduler()");
         QuartzSessionValidationScheduler sessionValidationScheduler = new QuartzSessionValidationScheduler();
         sessionValidationScheduler.setSessionValidationInterval(1800);
         sessionValidationScheduler.setSessionManager(sessionManager());
@@ -131,11 +142,12 @@ public class ShiroWebConfig {
      */
     @Bean
     public DefaultSessionManager sessionManager() {
+        System.out.println("******** sessionManager()");
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setGlobalSessionTimeout(1800);
         sessionManager.setDeleteInvalidSessions(true);
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setSessionValidationScheduler(sessionValidationScheduler());
+//        sessionManager.setSessionValidationSchedulerEnabled(true);
+//        sessionManager.setSessionValidationScheduler(sessionValidationScheduler());
         sessionManager.setSessionDAO(sessionDAO());
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(sessionIdCookie());
@@ -147,6 +159,7 @@ public class ShiroWebConfig {
      */
     @Bean
     public SecurityManager securityManager() {
+        System.out.println("******** securityManager()");
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(userRealm());
         securityManager.setSessionManager(sessionManager());
@@ -165,28 +178,48 @@ public class ShiroWebConfig {
      */
     @Bean
     public Filter formAuthenticationFilter() {
+        System.out.println("******** formAuthenticationFilter()");
         FormAuthenticationFilter formauthenticationFilter = new FormAuthenticationFilter();
         formauthenticationFilter.setUsernameParam("username");
         formauthenticationFilter.setPasswordParam("password");
         formauthenticationFilter.setRememberMeParam("rememberMe");
-        formauthenticationFilter.setLoginUrl("/login");
+        formauthenticationFilter.setLoginUrl("/login.jsp");
+        formauthenticationFilter.setSuccessUrl("/main.jsp");
+        formauthenticationFilter.setFailureKeyAttribute("shiroLoginFailure");
         return formauthenticationFilter;
     }
 
     @Bean
+    public Filter susUserFilter() {
+        System.out.println("******** susUserFilter()");
+        return new SysUserFilter();
+    }
+
+    @Bean
+    public Filter forceLogoutFilter() {
+        System.out.println("******** forceLogoutFilter()");
+        return new ForceLogoutFilter();
+    }
+
+    @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilter() {
+        System.out.println("******** shiroFilter()");
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager());
-        shiroFilter.setLoginUrl("/login");
+        shiroFilter.setLoginUrl("/login.jsp");
 
         Map<String, Filter> filters = new HashMap<>();
         filters.put("authc", formAuthenticationFilter());
-//        filters.put("user", userRealm());
+        filters.put("sysUser", susUserFilter());
+        filters.put("forceLogout", forceLogoutFilter());
         shiroFilter.setFilters(filters);
 
         Map<String, String> definitions = new HashMap<>();
+        definitions.put("/index.jsp", "anon");
         definitions.put("/login", "authc");
-        definitions.put("*//**", "user");
+        definitions.put("/logout", "logout");
+        definitions.put("/authenticated", "authc");
+        definitions.put("/**", "user,sysUser,forceLogout");
         shiroFilter.setFilterChainDefinitionMap(definitions);
 
         return shiroFilter;
@@ -194,6 +227,7 @@ public class ShiroWebConfig {
 
     @Bean
     public LifecycleBeanPostProcessor shiroLifecycle() {
+        System.out.println("******** shiroLifecycle()");
         LifecycleBeanPostProcessor shiroLifecycle = new LifecycleBeanPostProcessor();
         return shiroLifecycle;
     }

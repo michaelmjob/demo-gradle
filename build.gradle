@@ -50,12 +50,15 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-databind:2.6.4")
     compile("com.google.code.gson:gson:2.5")
 
+    compile("mysql:mysql-connector-java:5.1.38")
+
     compile("org.apache.tomcat:tomcat-jdbc:8.0.23")
 
 
-//    compile("org.apache.shiro:shiro-core:1.2.4")
-//    compile("org.apache.shiro:shiro-web:1.2.4")
-    compile("org.apache.shiro:shiro-all:1.2.4")
+//    compile("org.apache.shiro:shiro-all:1.2.4")
+    compile("org.apache.shiro:shiro-core:1.2.4")
+    compile("org.apache.shiro:shiro-web:1.2.4")
+    compile("org.apache.shiro:shiro-quartz:1.2.4")
     compile("org.apache.shiro:shiro-spring:1.2.4")
     compile("org.quartz-scheduler:quartz:2.2.2")
 

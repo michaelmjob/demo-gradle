@@ -27,13 +27,17 @@ public class ApplicationContextConfig {
     private String password;
 
 
-    @Bean(destroyMethod = "close")
+    @Bean
     public DataSource dataSource() {
         PoolConfiguration poolConfiguration = new PoolProperties();
-        poolConfiguration.setDriverClassName(driverClassName);
-        poolConfiguration.setUrl(url);
-        poolConfiguration.setUsername(username);
-        poolConfiguration.setPassword(password);
+//        poolConfiguration.setDriverClassName(driverClassName);
+//        poolConfiguration.setUrl(url);
+//        poolConfiguration.setUsername(username);
+//        poolConfiguration.setPassword(password);
+        poolConfiguration.setDriverClassName("com.mysql.jdbc.Driver");
+        poolConfiguration.setUrl("jdbc:mysql://localhost:3306/demo");
+        poolConfiguration.setUsername("shawn");
+        poolConfiguration.setPassword("shawn");
         DataSource dataSource = new DataSource(poolConfiguration);
         return dataSource;
     }

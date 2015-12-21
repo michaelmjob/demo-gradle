@@ -1,0 +1,43 @@
+.login-header {
+    width: 100%;
+    height: 100px;
+    background-color: #2aabd2;
+}
+
+.login-header h1 {
+    text-align: center;
+    height: 100px;
+    line-height: 100px;
+    overflow: hidden;
+}
+
+
+
+.login-main {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.login-main .login-lgn {
+
+}
+.login-main .login-pwd {
+
+}
+
+.login-main .login-yzm {
+    width: 200px;
+}
+
+.login-main .login-yzm-img {
+    height: 30px;
+    width: 80px;
+    margin-left: 10px;
+}
+
+
+.login-footer {
+    width: 100%;
+    height: 60px;
+    background-color: #9acfea;
+}
