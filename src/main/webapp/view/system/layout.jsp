@@ -7,6 +7,7 @@
     <jsp:include page="../include/jquery.jsp"/>
     <jsp:include page="../include/bootstrap.jsp"/>
     <link rel="stylesheet" href="../../static/style/layout.css">
+    <link rel="stylesheet" href="../../static/font-awesome/css/font-awesome.css">
 </head>
 <body>
 <%-- head title --%>
@@ -29,10 +30,14 @@
         </div>
         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="list-group">
-                <a href="javascript: openTab()" class="list-group-item text-center"><i class="glyphicon glyphicon-user"></i>用户管理</a>
-                <a href="#" class="list-group-item text-center">角色管理</a>
-                <a href="#" class="list-group-item text-center">菜单管理</a>
-                <a href="#" class="list-group-item text-center">权限管理</a>
+                <a href="javascript: openTab(10001)" class="list-group-item text-center">
+                    <i class="fa fa-user"></i>用户管理</a>
+                <a href="javascript: openTab(10002)" class="list-group-item text-center">
+                    <i class="fa fa-user-secret"></i>角色管理</a>
+                <a href="#" class="list-group-item text-center">
+                    <i class="fa fa-bars"></i>菜单管理</a>
+                <a href="#" class="list-group-item text-center">
+                    <i class="fa fa-key"></i>权限管理</a>
             </div>
         </div>
     </div>
@@ -71,16 +76,10 @@
 <div id="main-content" class="layout-center">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
         <%--<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>--%>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="home">...</div>
-        <div role="tabpanel" class="tab-pane" id="profile">...</div>
-        <div role="tabpanel" class="tab-pane" id="messages">...</div>
         <%--<div role="tabpanel" class="tab-pane" id="settings">...</div>--%>
     </div>
 </div>
@@ -88,34 +87,103 @@
 
 </div>
 <script>
-    var menu = {
+    var menus = [{
         "title": "用户管理",
-        "id": "10001",
-        "url": "user.jsp"
-    };
+        "id": 10001,
+        "url": "user.jsp",
+        "iconClass": "fa fa-user"
+    }, {
+        "title": "角色管理",
+        "id": 10002,
+        "url": "role.jsp",
+        "iconClass": "fa fa-user-secret"
+    }, {
+        "title": "菜单管理",
+        "id": 10003,
+        "url": "user.jsp",
+        "iconClass": "fa fa-bars"
+    }, {
+        "title": "权限管理",
+        "id": 10004,
+        "url": "user.jsp",
+        "iconClass": "fa fa-key"
+    }];
 
-    function openTab() {
+    $(function() {
+        $('#main-content .tab-content').load('main.jsp');
+    });
 
+    function openTab(id) {
+        var menu = (function() {
+            for (var i = 0; i < menus.length; i++) {
+                if (menus[i].id == id)
+                    return menus[i];
+            }
+        })();
 
-    var openedTabs = $('#main-content .nav-tabs li a');
-    var flag = false;
-    for (var i = 0; i < openedTabs.length; i++) {
-        if ($(openedTabs[i]).attr('href') == '#' + menu.id) {
-            $(openedTabs[i]).parent().attr('class', 'active');
-            flag = true;
+        var openedTabs = $('#main-content .nav-tabs li a');
+        var flag = false;
+        for (var i = 0; i < openedTabs.length; i++) {
+            if ($(openedTabs[i]).attr('aria-controls') == menu.id) {
+                $(openedTabs[i]).parent().attr('class', 'active');
+                flag = true;
+            } else {
+                $(openedTabs[i]).parent().removeAttr('class');
+            }
+        }
+        if (!flag) {
+            var tabTitle = '<li role="presentation" class="active" data-id="' + menu.id + '" data-url="' + menu.url + '">' +
+                    '<a href="#' + menu.id + '" onclick="clickTab(' + menu.id + ')" aria-controls="' + menu.id + '" role="tab" data-toggle="tab">' +
+                    '<i class="' + menu.iconClass + '" onclick="closeTab(' + menu.id + ')"></i>' + menu.title + '</a>' +
+                    '<i class="close-tab glyphicon glyphicon-remove" onclick="closeTab(' + menu.id + ')"></i></li>';
+            $('#main-content .nav-tabs').append(tabTitle);
+            $('#main-content .tab-content').load(menu.url);
         } else {
-            $(openedTabs[i]).parent().removeAttr('class');
+            $('#main-content .tab-content').load(menu.url);
         }
     }
-    if (!flag) {
-        var tabTitle = '<li role="presentation" class="active"><a href="#'+ menu.id +'" aria-controls="'+ menu.id +'" role="tab" data-toggle="tab">'+ menu.title +'</a></li>';
-        $('#main-content .nav-tabs').append(tabTitle);
-//    var tabContent = '<div role="tabpanel" class="tab-pane" id="settings"></div>';
+
+    function clickTab(id) {
+        var menu = (function() {
+            for (var i = 0; i < menus.length; i++) {
+                if (menus[i].id == id)
+                    return menus[i];
+            }
+        })();
+        var openedTabs = $('#main-content .nav-tabs li a');
+        for (var i = 0; i < openedTabs.length; i++) {
+            if ($(openedTabs[i]).attr('href') == '#' + menu.id) {
+                $(openedTabs[i]).parent().attr('class', 'active');
+            } else {
+                $(openedTabs[i]).parent().removeAttr('class');
+            }
+        }
         $('#main-content .tab-content').load(menu.url)
-//    $('#main-content .tab-content').append(tabTitle, function(){
-//        $('#settings').load('user.jsp')
-//    });
     }
+
+    function closeTab(id) {
+        var openedTabs = $('#main-content .nav-tabs li');
+        if (openedTabs.length == 1) {
+            $(openedTabs[0]).remove();
+            $('#main-content .tab-content').load('main.jsp');
+            return;
+        }
+        for (var i = 0; i < openedTabs.length; i++) {
+            if (openedTabs[i].dataset.id == id) {
+                if ($(openedTabs[i]).hasClass('active')) {
+                    if (i < openedTabs.length - 1) {
+                        var url = openedTabs[i + 1].dataset.url;
+                        $(openedTabs[i + 1]).attr('class', 'active');
+                        $('#main-content .tab-content').load(url);
+                    } else {
+                        var url = openedTabs[i - 1].dataset.url;
+                        $(openedTabs[i - 1]).attr('class', 'active');
+                        $('#main-content .tab-content').load(url);
+                    }
+                }
+                $(openedTabs[i]).remove();
+            }
+        }
     }
 
 
