@@ -26,25 +26,23 @@
     </div>
 
     <div class="panel-body content-panel">
-        <table class="table table-bordered" style="width: 85%;">
+        <table id="dict-list" class="table table-bordered" style="width: 85%;">
             <thead>
-            <th>角色名称</th>
-            <th>角色编码</th>
+            <th>字典名称</th>
+            <th>字典编码</th>
+            <th>字典类型</th>
+            <th>范围</th>
+            <th>是否可用</th>
             <th>描述</th>
-            <th>操作</th>
             </thead>
             <tbody>
             <tr>
                 <td>1</td>
+                <td>1</td>
+                <td>1</td>
                 <td>2</td>
                 <td>3</td>
                 <td>4</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
-                <td>8</td>
             </tr>
             </tbody>
         </table>
@@ -72,5 +70,35 @@
 
 
 <script>
+    $(function () {
+        loadDictList();
+    });
 
+    function loadDictList() {
+        $.ajax({
+            url: '/demo/dict/list.do',
+            cache: false,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data) {
+                    var html = '';
+                    var rows = data.rows;
+                    for (var i = 0; i < rows.length; i++) {
+                        html += '<tr>';
+                        html += '<td class="hidden">' + rows[i].id + '</td>'
+                        html += '<td>' + rows[i].text + '</td>'
+                        html += '<td>' + rows[i].code + '</td>'
+                        html += '<td>' + rows[i].type + '</td>'
+                        html += '<td>' + rows[i].scope + '</td>'
+                        html += '<td>' + rows[i].available + '</td>'
+                        html += '<td>' + rows[i].description + '</td>'
+                        html += '</tr>';
+                    }
+                    $('#dict-list tbody').empty();
+                    $('#dict-list tbody').append(html);
+                }
+            }
+        });
+    }
 </script>

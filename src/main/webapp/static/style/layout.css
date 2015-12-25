@@ -41,10 +41,6 @@ html, body {
     border-right: 2px solid;
 }
 
-.layout-menu i {
-    margin-right: 3px;
-}
-
 .layout-center {
     position:absolute;
     left: 15%;
@@ -60,19 +56,28 @@ html, body {
 }
 
 .nav > li > a {
-    padding-right: 23px;
+    padding: 9px 20px 8px 5px;
 }
 
-.nav-tabs li i {
-    margin-right: 3px;
-}
+/*.nav-tabs li i {*/
+    /*margin-right: 3px;*/
+/*}*/
 
 .close-tab {
     position:absolute;
-    right: 0px;
-    top: 8px;
-    margin: 6px;
+    right: 5px;
+    top: 13px;
+    /*margin: 6px 0px;*/
     z-index: 100000;
     cursor: hand;
     cursor: pointer;
+}
+
+.content-panel {
+    padding: 5px;
+}
+
+
+.table th,td {
+    text-align: center;
 }

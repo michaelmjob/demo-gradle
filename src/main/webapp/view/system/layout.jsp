@@ -24,20 +24,22 @@
             <h4 class="panel-title">
                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
                    aria-expanded="true" aria-controls="collapseOne">
-                    <i class="glyphicon glyphicon-cog"></i>系统管理
+                    <i class="fa fa-cogs fa-fw"></i>系统管理
                 </a>
             </h4>
         </div>
         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="list-group">
                 <a href="javascript: openTab(10001)" class="list-group-item text-center">
-                    <i class="fa fa-user"></i>用户管理</a>
+                    <i class="fa fa-user fa-fw"></i>用户管理</a>
                 <a href="javascript: openTab(10002)" class="list-group-item text-center">
-                    <i class="fa fa-user-secret"></i>角色管理</a>
-                <a href="#" class="list-group-item text-center">
-                    <i class="fa fa-bars"></i>菜单管理</a>
-                <a href="#" class="list-group-item text-center">
-                    <i class="fa fa-key"></i>权限管理</a>
+                    <i class="fa fa-user-secret fa-fw"></i>角色管理</a>
+                <a href="javascript: openTab(10003)" class="list-group-item text-center">
+                    <i class="fa fa-bars fa-fw"></i>菜单管理</a>
+                <a href="javascript: openTab(10004)" class="list-group-item text-center">
+                    <i class="fa fa-key fa-fw"></i>权限管理</a>
+                <a href="javascript: openTab(10005)" class="list-group-item text-center">
+                    <i class="fa fa-book fa-fw"></i>字典管理</a>
             </div>
         </div>
     </div>
@@ -91,22 +93,27 @@
         "title": "用户管理",
         "id": 10001,
         "url": "user.jsp",
-        "iconClass": "fa fa-user"
+        "iconClass": "fa fa-user fa-fw"
     }, {
         "title": "角色管理",
         "id": 10002,
         "url": "role.jsp",
-        "iconClass": "fa fa-user-secret"
+        "iconClass": "fa fa-user-secret fa-fw"
     }, {
         "title": "菜单管理",
         "id": 10003,
         "url": "user.jsp",
-        "iconClass": "fa fa-bars"
+        "iconClass": "fa fa-bars fa-fw"
     }, {
         "title": "权限管理",
         "id": 10004,
         "url": "user.jsp",
-        "iconClass": "fa fa-key"
+        "iconClass": "fa fa-key fa-fw"
+    }, {
+        "title": "字典管理",
+        "id": 10005,
+        "url": "dict.jsp",
+        "iconClass": "fa fa-book fa-fw"
     }];
 
     $(function() {
@@ -135,7 +142,7 @@
             var tabTitle = '<li role="presentation" class="active" data-id="' + menu.id + '" data-url="' + menu.url + '">' +
                     '<a href="#' + menu.id + '" onclick="clickTab(' + menu.id + ')" aria-controls="' + menu.id + '" role="tab" data-toggle="tab">' +
                     '<i class="' + menu.iconClass + '" onclick="closeTab(' + menu.id + ')"></i>' + menu.title + '</a>' +
-                    '<i class="close-tab glyphicon glyphicon-remove" onclick="closeTab(' + menu.id + ')"></i></li>';
+                    '<i class="close-tab fa fa-remove fa-fw" onclick="closeTab(' + menu.id + ')"></i></img></li>';
             $('#main-content .nav-tabs').append(tabTitle);
             $('#main-content .tab-content').load(menu.url);
         } else {

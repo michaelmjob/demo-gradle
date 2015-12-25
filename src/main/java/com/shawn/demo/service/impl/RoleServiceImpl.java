@@ -4,7 +4,6 @@ import com.shawn.demo.dao.IRoleDao;
 import com.shawn.demo.model.Role;
 import com.shawn.demo.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
