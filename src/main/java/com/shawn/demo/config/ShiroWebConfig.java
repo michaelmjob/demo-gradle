@@ -63,14 +63,14 @@ public class ShiroWebConfig {
     /**
      * Realm实现
      */
-    @Bean
-    public Realm userRealm() {
-        System.out.println("******** userRealm()");
-        UserRealm userRealm = new UserRealm();
-        userRealm.setCredentialsMatcher(credentialsMatcher());
-        userRealm.setCachingEnabled(false);
-        return userRealm;
-    }
+//    @Bean
+//    public Realm userRealm() {
+//        System.out.println("******** userRealm()");
+//        UserRealm userRealm = new UserRealm();
+//        userRealm.setCredentialsMatcher(credentialsMatcher());
+//        userRealm.setCachingEnabled(false);
+//        return userRealm;
+//    }
 
     /**
      * 会话ID生成器
@@ -157,16 +157,16 @@ public class ShiroWebConfig {
     /**
      * 安全管理器
      */
-    @Bean
-    public SecurityManager securityManager() {
-        System.out.println("******** securityManager()");
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(userRealm());
-        securityManager.setSessionManager(sessionManager());
-//        securityManager.setCacheManager();
-        securityManager.setRememberMeManager(rememberMeManager());
-        return securityManager;
-    }
+//    @Bean
+//    public SecurityManager securityManager() {
+//        System.out.println("******** securityManager()");
+//        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+//        securityManager.setRealm(userRealm());
+//        securityManager.setSessionManager(sessionManager());
+////        securityManager.setCacheManager();
+//        securityManager.setRememberMeManager(rememberMeManager());
+//        return securityManager;
+//    }
 
     /**
      * 相当于调用SecurityUtils.setSecurityManager(securityManager)
@@ -201,29 +201,29 @@ public class ShiroWebConfig {
         return new ForceLogoutFilter();
     }
 
-    @Bean(name = "shiroFilter")
-    public ShiroFilterFactoryBean shiroFilter() {
-        System.out.println("******** shiroFilter()");
-        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
-        shiroFilter.setSecurityManager(securityManager());
-        shiroFilter.setLoginUrl("/login.jsp");
-
-        Map<String, Filter> filters = new HashMap<>();
-        filters.put("authc", formAuthenticationFilter());
-        filters.put("sysUser", susUserFilter());
-        filters.put("forceLogout", forceLogoutFilter());
-        shiroFilter.setFilters(filters);
-
-        Map<String, String> definitions = new HashMap<>();
-        definitions.put("/index.jsp", "anon");
-        definitions.put("/login", "authc");
-        definitions.put("/logout", "logout");
-        definitions.put("/authenticated", "authc");
-        definitions.put("/**", "user,sysUser,forceLogout");
-        shiroFilter.setFilterChainDefinitionMap(definitions);
-
-        return shiroFilter;
-    }
+//    @Bean(name = "shiroFilter")
+//    public ShiroFilterFactoryBean shiroFilter() {
+//        System.out.println("******** shiroFilter()");
+//        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
+//        shiroFilter.setSecurityManager(securityManager());
+//        shiroFilter.setLoginUrl("/login.jsp");
+//
+//        Map<String, Filter> filters = new HashMap<>();
+//        filters.put("authc", formAuthenticationFilter());
+//        filters.put("sysUser", susUserFilter());
+//        filters.put("forceLogout", forceLogoutFilter());
+//        shiroFilter.setFilters(filters);
+//
+//        Map<String, String> definitions = new HashMap<>();
+//        definitions.put("/index.jsp", "anon");
+//        definitions.put("/login", "authc");
+//        definitions.put("/logout", "logout");
+//        definitions.put("/authenticated", "authc");
+//        definitions.put("/**", "user,sysUser,forceLogout");
+//        shiroFilter.setFilterChainDefinitionMap(definitions);
+//
+//        return shiroFilter;
+//    }
 
     @Bean
     public LifecycleBeanPostProcessor shiroLifecycle() {

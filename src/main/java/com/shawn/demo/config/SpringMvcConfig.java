@@ -2,6 +2,7 @@ package com.shawn.demo.config;
 
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.springframework.context.annotation.*;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -11,15 +12,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @Configuration
 @EnableAspectJAutoProxy
+@EnableSpringDataWebSupport
 @ComponentScan("com.shawn.demo.controller")
 @Import(ShiroWebConfig.class)
 public class SpringMvcConfig extends WebMvcConfigurerAdapter {
 
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(new ShiroWebConfig().securityManager());
-        return authorizationAttributeSourceAdvisor;
-    }
+//    @Bean
+//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+//        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+//        authorizationAttributeSourceAdvisor.setSecurityManager(new ShiroWebConfig().securityManager());
+//        return authorizationAttributeSourceAdvisor;
+//    }
 
 }

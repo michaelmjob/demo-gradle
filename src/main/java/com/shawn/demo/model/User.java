@@ -1,18 +1,31 @@
 package com.shawn.demo.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Shawn on 2015/12/16.
  */
+@Entity
+@Table(name = "sys_user")
 public class User implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long organizationId;
     private String username;
     private String password;
     private String salt;
-    private List<Long> roleIds;
+
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "sys_user_role",
+            inverseJoinColumns = @JoinColumn(name = "user_id"),
+            joinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles = new ArrayList<>();
     private Boolean locked = Boolean.FALSE;
 
     public User(){}
@@ -62,12 +75,12 @@ public class User implements Serializable {
         this.salt = salt;
     }
 
-    public List<Long> getRoleIds() {
-        return roleIds;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoleIds(List<Long> roleIds) {
-        this.roleIds = roleIds;
+    public void setRoleIds(List<Role> roles) {
+        this.roles = roles;
     }
 
     public Boolean getLocked() {

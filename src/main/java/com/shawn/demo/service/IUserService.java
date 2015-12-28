@@ -14,4 +14,6 @@ public interface IUserService {
     User findUserByName(String username);
 
     List<String> findRoles(String username);
+
+    List<User> findAll();
 }

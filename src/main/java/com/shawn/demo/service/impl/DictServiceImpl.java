@@ -1,7 +1,7 @@
 package com.shawn.demo.service.impl;
 
 import com.shawn.demo.commons.Page;
-import com.shawn.demo.dao.IDictRepository;
+import com.shawn.demo.dao.IDictDao;
 import com.shawn.demo.model.Dict;
 import com.shawn.demo.service.IDictService;
 import org.apache.commons.collections4.MapUtils;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class DictServiceImpl implements IDictService {
     @Autowired
-    IDictRepository dao;
+    IDictDao dao;
 
     @Override
     public Page<Dict> findDicts(Map<String, Object> params) {

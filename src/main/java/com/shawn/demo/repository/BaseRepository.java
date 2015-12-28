@@ -9,11 +9,11 @@ import java.io.Serializable;
 /**
  * Created by Shawn on 2015/12/25.
  */
-public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements IBaseRepository<T, ID> {
+public class BaseRepository<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements IBaseRepository<T, ID> {
 
     private EntityManager entityManager;
 
-    public BaseRepositoryImpl(JpaEntityInformation entityInformation, EntityManager entityManager) {
+    public BaseRepository(JpaEntityInformation entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);
         this.entityManager = entityManager;
     }

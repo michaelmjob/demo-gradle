@@ -9,7 +9,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Set;
 
@@ -20,6 +19,9 @@ import java.util.Set;
 public class UserRealm extends AuthorizingRealm {
     @Autowired
     IUserService userService;
+//
+//    @Autowired
+//    UserRepository repository;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {

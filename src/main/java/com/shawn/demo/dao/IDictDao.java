@@ -1,5 +1,6 @@
 package com.shawn.demo.dao;
 
+import com.shawn.demo.model.Dict;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Shawn on 2015/12/23.
  */
-public interface IDictRepository<Dict, ID extends Serializable> extends PagingAndSortingRepository<Dict, ID> {
+public interface IDictDao {
 
     List<Dict> findAll();
 

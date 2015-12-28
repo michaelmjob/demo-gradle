@@ -1,15 +1,28 @@
 package com.shawn.demo.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Shawn on 2015/12/15.
  */
+@Entity
+@Table(name = "sys_role")
 public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String role;
     private String description;
-    private List<Long> resourcesIds;
+
+    //    private List<Long> resourcesIds;
+    @ManyToMany(
+            cascade = CascadeType.REFRESH,
+            mappedBy = "roles",
+            fetch = FetchType.LAZY
+    )
+    private List<User> users = new ArrayList<>();
     private Boolean available = Boolean.FALSE;
 
     public Role() {
@@ -46,12 +59,19 @@ public class Role {
         this.description = description;
     }
 
-    public List<Long> getResourcesIds() {
-        return resourcesIds;
+//    public List<Long> getResourcesIds() {
+//        return resourcesIds;
+//    }
+
+//    public void setResourcesIds(List<Long> resourcesIds) {
+//        this.resourcesIds = resourcesIds;
+//    }
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setResourcesIds(List<Long> resourcesIds) {
-        this.resourcesIds = resourcesIds;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public Boolean getAvailable() {
