@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +22,7 @@ public class RoleController {
     IRoleService service;
 
     @RequestMapping(path = "/list.do", method = RequestMethod.POST)
-    public List<Map<String,Object>> getRoleList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> params) {
-        System.out.println("this is controller");
+    public Map<String,Object> getRoleList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> params) {
         return service.findRoles(params);
     }
 }

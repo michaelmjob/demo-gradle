@@ -11,9 +11,16 @@ import java.util.List;
 @Table(name = "sys_role")
 public class Role {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String role;
+    @Column(name = "code")
+    private String code;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "available")
+    private Boolean available = Boolean.FALSE;
+    @Column(name = "description")
     private String description;
 
     //    private List<Long> resourcesIds;
@@ -23,14 +30,13 @@ public class Role {
             fetch = FetchType.LAZY
     )
     private List<User> users = new ArrayList<>();
-    private Boolean available = Boolean.FALSE;
 
     public Role() {
 
     }
 
-    public Role(String role, String description, Boolean available) {
-        this.role = role;
+    public Role(String code, String name, String description, Boolean available) {
+        this.code = code;
         this.description = description;
         this.available = available;
     }
@@ -43,12 +49,28 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getCode() {
+        return code;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 
     public String getDescription() {
@@ -59,26 +81,11 @@ public class Role {
         this.description = description;
     }
 
-//    public List<Long> getResourcesIds() {
-//        return resourcesIds;
-//    }
-
-//    public void setResourcesIds(List<Long> resourcesIds) {
-//        this.resourcesIds = resourcesIds;
-//    }
     public List<User> getUsers() {
         return users;
     }
 
     public void setUsers(List<User> users) {
         this.users = users;
-    }
-
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
     }
 }

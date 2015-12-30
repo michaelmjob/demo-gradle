@@ -3,11 +3,9 @@ package com.shawn.demo.controller;
 import com.shawn.demo.model.User;
 import com.shawn.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +30,7 @@ public class UserController {
     }
 
     @RequestMapping("/list.do")
+    @ResponseStatus(HttpStatus.OK)
     public List<User> getUserList() {
         return service.findAll();
     }

@@ -1,6 +1,5 @@
 package com.shawn.demo.config;
 
-import com.shawn.demo.repository.BaseRepository;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolConfiguration;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
@@ -12,9 +11,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.persistence.EntityManagerFactory;
 
 /**
  * Created by Shawn on 2015/12/24.
@@ -22,6 +27,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 @ComponentScan("com.shawn.demo")
 @EnableJpaRepositories(basePackages = "com.shawn.demo")
+@EnableTransactionManagement
 @PropertySource("classpath:jdbc.properties")
 public class SpringDataConfig {
 
@@ -61,20 +67,29 @@ public class SpringDataConfig {
     }
 
     @Bean
-    public HibernateJpaVendorAdapter hibernateJpaVendorAdapter() {
-        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
-        hibernateJpaVendorAdapter.setGenerateDdl(true);
-        hibernateJpaVendorAdapter.setShowSql(true);
-        return hibernateJpaVendorAdapter;
+    public HibernateJpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+        jpaVendorAdapter.setDatabase(Database.MYSQL);
+//        jpaVendorAdapter.setGenerateDdl(false);
+        jpaVendorAdapter.setShowSql(true);
+        return jpaVendorAdapter;
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource());
+        entityManagerFactory.setJpaDialect(new HibernateJpaDialect());
         entityManagerFactory.setPackagesToScan("com.shawn.demo");
-        entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter());
-        return entityManagerFactory;
+        entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());
+        entityManagerFactory.afterPropertiesSet();
+        return entityManagerFactory.getObject();
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory());
+        return transactionManager;
     }
 }

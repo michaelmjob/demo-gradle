@@ -1,11 +1,8 @@
 package com.shawn.demo.repository;
 
 import com.shawn.demo.model.User;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

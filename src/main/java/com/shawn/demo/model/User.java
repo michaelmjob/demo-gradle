@@ -1,5 +1,7 @@
 package com.shawn.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,12 +14,19 @@ import java.util.List;
 @Table(name = "sys_user")
 public class User implements Serializable {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "organization_id")
     private Long organizationId;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "salt")
     private String salt;
+    @Column(name = "locked")
+    private Boolean locked = Boolean.FALSE;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(
@@ -25,8 +34,8 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "user_id"),
             joinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonIgnore
     private List<Role> roles = new ArrayList<>();
-    private Boolean locked = Boolean.FALSE;
 
     public User(){}
 
